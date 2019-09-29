@@ -13,4 +13,10 @@
 class Student < ActiveRecord::Base
   has_many :classroom_students
   has_many :classrooms, through: :classroom_students
+
+  def self.search(student_search)
+    clean_student = sanitize(student_search).downcase.gsub("'", "")
+    search = "%#{clean_student}%"
+    self.where(['name LIKE ?', search])
+  end
 end
